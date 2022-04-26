@@ -357,7 +357,7 @@ theorem impl_refl :
   P → P  :=
 begin
   intro h,
-  assumption,
+  exact h,
 end
 
 ------------------------------------------------
@@ -369,7 +369,7 @@ theorem weaken_disj_right :
 begin
   intro h,
   left,
-  assumption,
+  exact h,
 end
 
 theorem weaken_disj_left :
@@ -377,7 +377,7 @@ theorem weaken_disj_left :
 begin
   intro h,
   right,
-  assumption,
+  exact h,
 end
 
 theorem weaken_conj_right :
@@ -385,7 +385,7 @@ theorem weaken_conj_right :
 begin
   intro h,
   cases h with hp hq,
-  assumption,
+  exact hp,
 end
 
 theorem weaken_conj_left :
@@ -393,7 +393,7 @@ theorem weaken_conj_left :
 begin
   intro h,
   cases h with hp hq,
-  assumption,
+  exact hq,
 end
 
 theorem conj_idempot :
@@ -402,10 +402,10 @@ begin
   split,
   intro h,
     cases h,
-    assumption,
+    exact h_left,
   intro h,
   split,
-  repeat {assumption},
+  repeat {exact h},
 end
 
 theorem disj_idempot :
@@ -414,10 +414,10 @@ begin
   split,
   intro h,
     cases h,
-    repeat {assumption},
+    repeat {exact h},
   intro h,
   left,
-  assumption,
+  exact h,
 end
 
 end propositional
@@ -444,7 +444,7 @@ begin
   intro hp,
   apply h,
   existsi u,
-  assumption,
+  exact hp,
 end
 
 theorem demorgan_exists_converse :
@@ -454,7 +454,7 @@ begin
   intro hp,
   cases hp with u hu,
   apply h u,
-  assumption,
+  exact hu,
 end
 
 theorem demorgan_forall :
@@ -612,7 +612,12 @@ end
 theorem forall_conj_as_conj_forall :
   (∀x, P x ∧ Q x) → (∀x, P x) ∧ (∀x, Q x)  :=
 begin
-  sorry,
+  intro h,
+  split,
+  intro u,
+  apply (h u).left,
+  intro v,
+  apply (h v).right,
 end
 
 theorem forall_conj_as_conj_forall_converse :
