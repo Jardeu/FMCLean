@@ -129,9 +129,9 @@ begin
   apply h,
   by_cases P,
   left,
-  assumption,
+  exact h,
   right,
-  assumption,
+  exact h,
 end
 
 
@@ -190,12 +190,12 @@ begin
   intro hp,
   apply h,
   left,
-  assumption,
+  exact hp,
 
   intro hq,
   apply h,
   right,
-  assumption,
+  exact hq,
 end
 
 theorem demorgan_disj_converse :
@@ -211,7 +211,14 @@ end
 theorem demorgan_conj :
   ¬(P∧Q) → (¬Q ∨ ¬P)  :=
 begin
-  sorry,
+  intro h,
+  by_cases hp: P,
+  left,
+  intro hq,
+  apply h,
+  apply and.intro hp hq,
+  right,
+  exact hp,
 end
 
 theorem demorgan_conj_converse :
@@ -230,28 +237,17 @@ end
 theorem demorgan_conj_law :
   ¬(P∧Q) ↔ (¬Q ∨ ¬P)  :=
 begin
-  sorry,
+  split,
+  apply demorgan_conj,
+  apply demorgan_conj_converse,
 end
 
 theorem demorgan_disj_law :
   ¬(P∨Q) ↔ (¬P ∧ ¬Q)  :=
 begin
   split,
-  intro h,
-  split,
-  intro hp,
-    apply h,
-    left,
-    assumption,
-  intro hq,
-    apply h,
-    right,
-    assumption,
-  intro h,
-  cases h,
-  intro hpq,
-  cases hpq,
-  repeat {contradiction},
+  apply demorgan_disj,
+  apply demorgan_disj_converse,
 end
 
 ------------------------------------------------
@@ -280,15 +276,15 @@ begin
   cases h,
   repeat {
     cases h with hp hq,
-    assumption
+    exact hp,
   },
   cases h,
   left,
   cases h with hp hq,
-  assumption,
+  exact hq,
   right,
   cases h with hq hr,
-  assumption,
+  exact hr,
 end
 
 theorem distr_disj_conj :
@@ -296,18 +292,14 @@ theorem distr_disj_conj :
 begin
   intro h,
   split,
-  cases h,
+  repeat {
+    cases h,
     left,
-    assumption,
+    exact h,
     right,
     cases h with hq hr,
     assumption,
-  cases h,
-    left,
-    assumption,
-    right,
-    cases h with hq hr,
-    assumption,
+  }
 end
 
 theorem distr_disj_conj_converse :
@@ -317,11 +309,11 @@ begin
   cases h with hpq hqr,
   cases hpq,
   left,
-  assumption,
+  exact hpq,
 
   cases hqr,
   left,
-  assumption,
+  exact hqr,
   right,
   split,
   repeat {assumption},
@@ -492,36 +484,16 @@ theorem demorgan_forall_law :
   ¬(∀x, P x) ↔ (∃x, ¬P x)  :=
 begin
   split,
-  intro h,
-    by_contradiction hboom,
-    apply h,
-    intro u,
-    by_contra,
-    apply hboom,
-    existsi u,
-    exact h,
-  intro h,
-  intro n_forall,
-  cases h with u hu,
-  apply hu,
-  apply n_forall,
+  apply demorgan_forall,
+  apply demorgan_forall_converse,
 end
 
 theorem demorgan_exists_law :
   ¬(∃x, P x) ↔ (∀x, ¬P x)  :=
 begin
   split,
-  intro h,
-    intro u,
-    intro hp,
-    apply h,
-    existsi u,
-    assumption,
-  intro h,
-    intro hp,
-    cases hp with u hu,
-    apply h u,
-    assumption,
+  apply demorgan_exists,
+  apply demorgan_exists_converse,
 end
 
 
@@ -536,7 +508,7 @@ begin
   intro hp,
   cases h with u hu,
   apply hp u,
-  assumption,
+  exact hu,
 end
 
 theorem forall_as_neg_exists :
@@ -557,7 +529,7 @@ begin
   by_contradiction hboom,
   apply h,
   existsi u,
-  assumption,
+  exact hboom,
 end
 
 theorem exists_as_neg_forall_converse :
@@ -570,43 +542,23 @@ begin
   intro pu,
   apply hboom,
   existsi u,
-  assumption,
+  exact pu,
 end
 
 theorem forall_as_neg_exists_law :
   (∀x, P x) ↔ ¬(∃x, ¬P x)  :=
 begin
   split,
-  intro h,
-    intro hexist,
-    cases hexist with u hu,
-    apply hu,
-    apply h,
-  intro h,
-    intro u,
-    by_contradiction hboom,
-    apply h,
-    existsi u,
-    assumption,
+  apply forall_as_neg_exists,
+  apply forall_as_neg_exists_converse,
 end
 
 theorem exists_as_neg_forall_law :
   (∃x, P x) ↔ ¬(∀x, ¬P x)  :=
 begin
   split,
-  intro h,
-    intro n_forall,
-    cases h with u hu,
-    apply n_forall u,
-    assumption,
-  intro h,
-    by_contradiction hboom,
-    apply h,
-    intro u,
-    intro pu,
-    apply hboom,
-    existsi u,
-    assumption,
+  apply exists_as_neg_forall,
+  apply exists_as_neg_forall_converse,
 end
 
 
@@ -636,10 +588,10 @@ begin
   cases hu with hp hq,
   left,
   existsi u,
-  assumption,
+  exact hp,
   right,
   existsi u,
-  assumption,
+  exact hq,
 end
 
 theorem exists_disj_as_disj_exists_converse :
@@ -652,9 +604,9 @@ begin
     existsi u,
   },
   left,
-  assumption,
+  exact hu,
   right,
-  assumption,
+  exact hu,
 end
 
 theorem forall_conj_as_conj_forall :
