@@ -22,20 +22,15 @@ begin
   intro h,
   by_contradiction hboom,
   have hq : false := h hboom,
-  assumption,
+  exact hq,
 end
 
 theorem doubleneg_law :
   ¬¬P ↔ P  :=
 begin
   split,
-  intro h,
-    by_contradiction hboom,
-    have hp : false := h hboom,
-    assumption,
-  intro h,
-    intro g,
-    contradiction,
+  apply doubleneg_elim,
+  apply doubleneg_intro,
 end
 
 ------------------------------------------------
@@ -49,10 +44,10 @@ begin
   cases h with hp hq,
 
   right,
-  assumption,
+  exact hp,
 
   left,
-  assumption,
+  exact hq,
 end
 
 theorem conj_comm :
@@ -76,7 +71,7 @@ begin
   intro hp,
   cases h,
   contradiction,
-  assumption,
+  exact h,
 end
 
 theorem disj_as_impl :
@@ -86,7 +81,7 @@ begin
   intro hnp,
   cases h,
   contradiction,
-  assumption,
+  exact h,
 end
 
 
@@ -118,16 +113,8 @@ theorem contrapositive_law :
   (P → Q) ↔ (¬Q → ¬P)  :=
 begin
   split,
-  intro h,
-    intro hq,
-    intro nq,
-    have hpq: Q := h nq,
-    contradiction,
-  intro h,
-    intro hp,
-    by_contradiction hboom,
-    have hpq: ¬P := h hboom,
-    contradiction,
+  apply impl_as_contrapositive,
+  apply impl_as_contrapositive_converse,
 end
 
 
@@ -488,7 +475,7 @@ begin
   by_contra,
   apply hboom,
   existsi u,
-  assumption,
+  exact h,
 end
 
 theorem demorgan_forall_converse :
@@ -512,7 +499,7 @@ begin
     by_contra,
     apply hboom,
     existsi u,
-    assumption,
+    exact h,
   intro h,
   intro n_forall,
   cases h with u hu,
